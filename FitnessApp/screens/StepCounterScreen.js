@@ -14,6 +14,7 @@ const StepCounterScreen = () => {
   const [goalSteps, setGoalSteps] = useState(6000);
   const [permissionStatus, setPermissionStatus] = useState(null);
   const intervalRef = useRef(null);
+  const localStepCountRef = useRef(0); // Ref to maintain local step count
 
   useEffect(() => {
     let subscription;
@@ -27,7 +28,8 @@ const StepCounterScreen = () => {
       if (permissionStatus === 'granted') {
         subscription = Pedometer.watchStepCount(result => {
           if (!isPaused) {
-            setCurrentStepCount(result.steps);
+            localStepCountRef.current += result.steps; // Accumulate local step count
+            setCurrentStepCount(localStepCountRef.current);
           }
         });
 
@@ -134,6 +136,7 @@ const StepCounterScreen = () => {
   useEffect(() => {
     if (currentStepCount > 0) {
       setTotalSteps(prevSteps => prevSteps + currentStepCount);
+      localStepCountRef.current = 0; // Reset local step count
       setCurrentStepCount(0); // Reset current step count to avoid adding the same steps multiple times
     }
   }, [currentStepCount]);

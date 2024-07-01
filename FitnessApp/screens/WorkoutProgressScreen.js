@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-
 
 const WorkoutProgressScreen = () => {
   const route = useRoute();
@@ -12,20 +11,25 @@ const WorkoutProgressScreen = () => {
   const [timeLeft, setTimeLeft] = useState(workout.duration);
 
   useEffect(() => {
+    let currentTimeLeft = workout.duration; // Local variable to track time left
+    setProgress(0); // Reset progress to 0
+
+
     const timer = setInterval(() => {
-      if (workout.duration > 0) {
+      if (currentTimeLeft > 0) {
         setProgress((prev) => prev + 100 / workout.duration);
-        setTimeLeft((prev) => prev - 1);
+        currentTimeLeft -= 1; // Decrement local time left
+        setTimeLeft(currentTimeLeft); // Update state with local time left
       }
-  
-      if (timeLeft <= 0) {
+
+      if (currentTimeLeft <= 0) {
         clearInterval(timer);
         navigation.navigate('WorkoutDone', { workout, nextWorkouts });
       }
     }, 1000);
-  
+
     return () => clearInterval(timer);
-  }, [timeLeft]);
+  }, [workout, nextWorkouts, navigation]); // Add workout, nextWorkouts, and navigation to dependency array
 
   return (
     <View style={styles.container}>
@@ -70,11 +74,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#00e0ff',
   },
-workoutRepeats: {
+  workoutRepeats: {
     fontSize: 18,
     color: '#555',
     bottom: 10,
-},
+  },
 });
 
 export default WorkoutProgressScreen;

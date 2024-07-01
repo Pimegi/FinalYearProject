@@ -13,7 +13,7 @@ const WorkoutDoneScreen = () => {
     if (nextWorkouts.length > 0) {
       navigation.navigate('WorkoutProgress', { workout: nextWorkouts[0], nextWorkouts: nextWorkouts.slice(1) });
     } else {
-      navigation.navigate('Workouts');
+      navigation.navigate('WorkoutsScreen');
     }
   };
 

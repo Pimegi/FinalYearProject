@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from '../src/api/axios';
 import { useNavigation } from '@react-navigation/native';
+import ProgressBar from 'react-native-progress/Bar';
 
 const HomeScreen = () => {
   const [user, setUser] = useState(null);
@@ -21,6 +22,8 @@ const HomeScreen = () => {
             },
           });
           const user = response.data;
+          // Mock water intake for demonstration
+          
           setUser(user);
           calculateBMI(user.height, user.weight);
         } catch (err) {
@@ -33,29 +36,17 @@ const HomeScreen = () => {
   }, []);
 
   const calculateBMI = (height, weight) => {
-    if (height && weight) {
-      const heightInMeters = parseFloat(height) / 100;
-      const weightInKg = parseFloat(weight);
-      const bmiValue = weightInKg / (heightInMeters * heightInMeters);
-      setBmi(bmiValue.toFixed(1));
-
-      if (bmiValue < 16) {
-        setBmiCategory('Severely Underweight');
-      } else if (bmiValue >= 16 && bmiValue < 17) {
-        setBmiCategory('Underweight');
-      } else if (bmiValue >= 17 && bmiValue < 18.5) {
-        setBmiCategory('Underweight');
-      } else if (bmiValue >= 18.5 && bmiValue < 25) {
-        setBmiCategory('Normal');
-      } else if (bmiValue >= 25 && bmiValue < 30) {
-        setBmiCategory('Overweight');
-      } else if (bmiValue >= 30 && bmiValue < 35) {
-        setBmiCategory('Obese Class I');
-      } else if (bmiValue >= 35 && bmiValue < 40) {
-        setBmiCategory('Obese Class II');
-      } else {
-        setBmiCategory('Obese Class III');
-      }
+    const heightInMeters = height / 100;
+    const bmi = weight / (heightInMeters * heightInMeters);
+    setBmi(bmi.toFixed(1));
+    if (bmi < 18.5) {
+      setBmiCategory('Underweight');
+    } else if (bmi < 24.9) {
+      setBmiCategory('Normal weight');
+    } else if (bmi < 29.9) {
+      setBmiCategory('Overweight');
+    } else {
+      setBmiCategory('Obesity');
     }
   };
 
@@ -69,22 +60,27 @@ const HomeScreen = () => {
           </View>
           <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('StepCounter')}>
             <Text style={styles.cardTitle}>Steps</Text>
-            <Text style={styles.cardValue}>{user.currentStepCount}</Text>
-            <Text style={styles.cardGoal}>Goal: {user.goalSteps}</Text>
+            <View style={styles.cardContent}></View>
+            <Image source={require('../assets/steps.png')} style={styles.inlineImage} />
+            <ProgressBar progress={user.currentStepCount / user.goalSteps} width={null} />
+            <Text style={styles.cardValue}>{user.currentStepCount} / {user.goalSteps}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('BMICalculator')}>
             <Text style={styles.cardTitle}>BMI Calculator</Text>
+            <Image source={require('../assets/scale.png')} style={styles.inlineImage} />
             <Text style={styles.cardValue}>Your BMI is {bmi} ({bmiCategory})</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('WaterIntake')}>
             <Text style={styles.cardTitle}>Water Intake</Text>
+              <Image source={require('../assets/water.png')} style={styles.inlineImage} />
+              <ProgressBar progress={user.waterIntake / user.drinkGoal} width={null} />
+            <Text style={styles.cardValue}>{user.waterIntake}ml / {user.drinkGoal}ml</Text>
           </TouchableOpacity>
         </>
       )}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -111,6 +107,14 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   cardTitle: {
     fontSize: 16,
@@ -144,6 +148,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
+  },
+  inlineImage: {
+    width: 50, 
+    height: 50, 
+    marginRight: 10, 
   },
 });
 

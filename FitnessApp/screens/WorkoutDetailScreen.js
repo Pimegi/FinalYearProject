@@ -28,9 +28,6 @@ const WorkoutDetailScreen = () => {
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.goBack()}>
           <Text style={styles.navButtonText}>Back</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('WorkoutProgress', { workout })}>
-          <Text style={styles.navButtonText}>Start</Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -89,7 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#007BFF',
     padding: 10,
     borderRadius: 5,
-    bottom: 10,
+    bottom: 30,
   },
   navButtonText: {
     color: '#fff',
