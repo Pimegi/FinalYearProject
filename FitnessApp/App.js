@@ -13,7 +13,6 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import EditProfileScreen from './screens/EditProfileScreen';
 import { Ionicons } from '@expo/vector-icons';
 import StepCounterScreen from './screens/StepCounterScreen';
-import MacrosScreen from './screens/MacrosScreen';
 import BMICalculatorScreen from './screens/BMICalculatorScreen';
 import WaterIntakeScreen from './screens/WaterIntakeScreen';
 import WorkoutDetailScreen from './screens/WorkoutDetailScreen';
@@ -33,7 +32,6 @@ function HomeStackScreen() {
   return (<HomeStack.Navigator>
     <HomeStack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
     <HomeStack.Screen name="StepCounter" component={StepCounterScreen} options={{ headerShown: false }} />
-    <HomeStack.Screen name="Macros" component={MacrosScreen} options={{ headerShown: false }} />
     <HomeStack.Screen name="BMICalculator" component={BMICalculatorScreen} options={{ headerShown: false }} />
     <HomeStack.Screen name="WaterIntake" component={WaterIntakeScreen} options={{ headerShown: false }} />
   </HomeStack.Navigator>);
