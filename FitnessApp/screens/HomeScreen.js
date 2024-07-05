@@ -45,7 +45,7 @@ const HomeScreen = () => {
       setBmiCategory('Normal weight');
     } else if (bmi < 29.9) {
       setBmiCategory('Overweight');
-    } else {
+    } else if (bmi > 29.9) {
       setBmiCategory('Obesity');
     }
   };
